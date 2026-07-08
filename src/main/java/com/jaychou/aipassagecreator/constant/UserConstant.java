@@ -1,4 +1,4 @@
-package com.jaychou.constant;
+package com.jaychou.aipassagecreator.constant;
 
 public interface UserConstant {
 

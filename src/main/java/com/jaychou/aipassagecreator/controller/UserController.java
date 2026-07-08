@@ -12,7 +12,7 @@ import com.jaychou.aipassagecreator.model.dto.user.*;
 import com.jaychou.aipassagecreator.model.entity.User;
 import com.jaychou.aipassagecreator.model.vo.UserVO;
 import com.jaychou.aipassagecreator.service.UserService;
-import com.jaychou.constant.UserConstant;
+import com.jaychou.aipassagecreator.constant.UserConstant;
 import com.mybatisflex.core.paginate.Page;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
@@ -32,7 +32,7 @@ import java.util.List;
 /**
  * 用户控制层
  *
- * @author <a href="https://codefather.cn">编程导航学习圈</a>
+
  */
 @RestController
 @RequestMapping("/user")

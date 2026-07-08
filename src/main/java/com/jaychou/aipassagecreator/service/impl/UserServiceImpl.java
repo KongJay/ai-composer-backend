@@ -15,6 +15,7 @@ import com.jaychou.aipassagecreator.service.UserService;
 import com.mybatisflex.core.query.QueryWrapper;
 import com.mybatisflex.spring.service.impl.ServiceImpl;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
 
@@ -23,8 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.jaychou.constant.UserConstant.DEFAULT_QUOTA;
-import static com.jaychou.constant.UserConstant.USER_LOGIN_STATE;
+import static com.jaychou.aipassagecreator.constant.UserConstant.USER_LOGIN_STATE;
 
 /**
  * ClassName: UserServiceImpl
@@ -38,7 +38,6 @@ import static com.jaychou.constant.UserConstant.USER_LOGIN_STATE;
 /**
  * 用户 服务层实现。
  *
- * @author <a href="https://codefather.cn">编程导航学习圈</a>
  */
 @Service
 public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements UserService {
@@ -73,7 +72,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         user.setUserPassword(encryptPassword);
         user.setUserName("无名");
         user.setUserRole(UserRoleEnum.USER.getValue());
-        user.setQuota(DEFAULT_QUOTA);
+//        user.setQuota(DEFAULT_QUOTA);
         boolean saveResult = this.save(user);
         if (!saveResult) {
             throw new BusinessException(ErrorCode.OPERATION_ERROR, "注册失败，数据库错误");
@@ -115,6 +114,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         }
         // 4. 如果用户存在，记录用户的登录态
         request.getSession().setAttribute(USER_LOGIN_STATE, user);
+        
         // 5. 返回脱敏的用户信息
         return this.getLoginUserVO(user);
     }
@@ -122,7 +122,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     @Override
     public User getLoginUser(HttpServletRequest request) {
         // 先判断用户是否登录
-        Object userObj = request.getSession().getAttribute(USER_LOGIN_STATE);
+        HttpSession session = request.getSession();
+        Object userObj = session.getAttribute(USER_LOGIN_STATE);
         User currentUser = (User) userObj;
         if (currentUser == null || currentUser.getId() == null) {
             throw new BusinessException(ErrorCode.NOT_LOGIN_ERROR);
@@ -192,7 +193,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     @Override
     public String getEncryptPassword(String userPassword) {
         // 盐值，混淆密码
-        final String SALT = "yupi";
+        final String SALT = "jaychou";
         return DigestUtils.md5DigestAsHex((userPassword + SALT).getBytes(StandardCharsets.UTF_8));
     }
 }

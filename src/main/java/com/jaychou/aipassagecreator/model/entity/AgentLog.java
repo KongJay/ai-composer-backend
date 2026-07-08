@@ -4,7 +4,6 @@ import com.mybatisflex.annotation.Column;
 import com.mybatisflex.annotation.Id;
 import com.mybatisflex.annotation.KeyType;
 import com.mybatisflex.annotation.Table;
-import com.mybatisflex.core.keygen.KeyGenerators;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -14,12 +13,16 @@ import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
+/**
+ * 智能体执行日志实体类
+ *
+ */
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(value = "user", camelToUnderline = false)
-public class User implements Serializable {
+@Table(value = "agent_log", camelToUnderline = false)
+public class AgentLog implements Serializable {
 
     @Serial
     private static final long serialVersionUID = 1L;
@@ -27,53 +30,58 @@ public class User implements Serializable {
     /**
      * id
      */
-    @Id(keyType = KeyType.Generator, value = KeyGenerators.snowFlakeId)
+    @Id(keyType = KeyType.Auto)
     private Long id;
 
     /**
-     * 账号
+     * 任务ID
      */
-    private String userAccount;
+    private String taskId;
 
     /**
-     * 密码
+     * 智能体名称
      */
-    private String userPassword;
+    private String agentName;
 
     /**
-     * 用户昵称
+     * 开始时间
      */
-    private String userName;
+    private LocalDateTime startTime;
 
     /**
-     * 用户头像
+     * 结束时间
      */
-    private String userAvatar;
+    private LocalDateTime endTime;
 
     /**
-     * 用户简介
+     * 耗时（毫秒）
      */
-    private String userProfile;
+    private Integer durationMs;
 
     /**
-     * 用户角色：user/admin
+     * 状态：SUCCESS/FAILED
      */
-    private String userRole;
-
-//    /**
-//     * 剩余配额
-//     */
-//    private Integer quota;
-
-//    /**
-//     * 成为会员时间
-//     */
-//    private LocalDateTime vipTime;
+    private String status;
 
     /**
-     * 编辑时间
+     * 错误信息
      */
-    private LocalDateTime editTime;
+    private String errorMessage;
+
+    /**
+     * 使用的Prompt
+     */
+    private String prompt;
+
+    /**
+     * 输入数据（JSON格式）
+     */
+    private String inputData;
+
+    /**
+     * 输出数据（JSON格式）
+     */
+    private String outputData;
 
     /**
      * 创建时间
@@ -90,4 +98,5 @@ public class User implements Serializable {
      */
     @Column(isLogicDelete = true)
     private Integer isDelete;
+
 }
